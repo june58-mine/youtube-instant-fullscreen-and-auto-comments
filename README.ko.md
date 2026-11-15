@@ -1,89 +1,68 @@
+<div align="center">
+
 [English](./README.md) · **한국어** · [日本語](./README.ja.md) · [简体中文](./README.zh-CN.md)
 
 # YouTube 즉시 전체화면 & 자동 댓글창
 
 **YouTube Instant Fullscreen & Auto Comments**
 
-YouTube 전체화면 전환 시 확대 효과가 부자연스럽게 끊기는 현상을 제거하고, 댓글창 애니메이션 비활성화 및 영상 재생·전체화면 일시정지 시 댓글창 자동 열기를 지원하는 유저스크립트입니다.
+유튜브 전체화면 전환 시 화면이 끊기며 확대되는 현상을 없애고, 댓글창 애니메이션을 끄거나 재생·일시정지 상태에 맞춰 댓글창을 자동으로 열어 주는 유저스크립트입니다.
 
-- **버전:** `1.9.0`
-- **작성자:** [`june58-mine`](https://github.com/june58-mine)
-- **라이선스:** `MIT`
-- **대상 사이트:** `https://www.youtube.com/*`
-- **스크립트 파일:** [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js)
+<p>
+  <img src="https://img.shields.io/badge/version-1.9.0-19191b?style=flat-square&labelColor=0f0f10" alt="Version 1.9.0" />
+  <img src="https://img.shields.io/badge/license-MIT-19191b?style=flat-square&labelColor=0f0f10" alt="MIT License" />
+  <img src="https://img.shields.io/badge/userscript-Tampermonkey%20%7C%20Violentmonkey-19191b?style=flat-square&labelColor=0f0f10" alt="Tampermonkey and Violentmonkey" />
+</p>
 
----
+</div>
 
 ## 주요 기능
 
-### 전체화면 (Fullscreen)
+### 전체화면
 
-- **전체화면 중간 크기 단계 제거** (`기본값: 켜짐`)
-  - YouTube의 `external_fullscreen` 및 `externalFullscreen` 설정을 비활성화해 영상을 전체화면으로 전환할 때 확대 효과가 부자연스럽게 끊기는 현상을 제거합니다.
-  - 전체화면 진입 전에 열어 두었던 패널(댓글창, 실시간 채팅, 스크립트 등)은 전체화면을 해제할 때 원래 상태로 자동 복원됩니다.
-- **영상 재생 시 자동 전체화면** (`기본값: 꺼짐`)
-  - 시청 페이지(`/watch`, `/live/*`)에서 영상 재생이 시작될 때 자동으로 전체화면으로 전환합니다. (영상이 끝나거나 다시 재생하기 전까지 영상당 한 번만 실행)
-  - 브라우저 정책(`navigator.userActivation`)에 따라 클릭·키 입력 등 사용자 동작이 수반된 재생에서 작동합니다.
+- **전체화면 중간 크기 단계 제거** (`기본값: 켜짐`): 영상을 전체화면으로 전환할 때 확대 효과가 부자연스럽게 끊기는 현상을 제거합니다.
+- **영상 재생 시 자동 전체화면** (`기본값: 꺼짐`): 시청 페이지(`/watch`, `/live/*`)에서 재생이 시작되면 자동으로 전체화면으로 전환합니다. 한 영상당 처음 한 번만 동작하며, 영상이 끝나거나 다시 재생하면 초기화됩니다.
 
-### 댓글창 (Comments)
+### 댓글창
 
-- **댓글창 애니메이션 제거** (`기본값: 켜짐`)
-  - 댓글창과 사이드 패널을 열고 닫을 때의 슬라이드·리사이즈·View Transition 애니메이션을 제거합니다. (`watch-flexy`, `watch-grid`, `watch-learning-journey` 레이아웃 지원)
-  - `window.matchMedia`의 `prefers-reduced-motion` 쿼리를 훅킹하고 CSS 지속 시간을 `0.001ms`로 설정해, YouTube 내부의 `transitionend` / `animationend` 완료 이벤트가 깨지지 않도록 처리합니다.
-- **영상 재생 시작 시 댓글창 열기** (`기본값: 켜짐`)
-  - 시청 페이지에서 재생이 시작되면 댓글 패널(`engagement-panel-comments-section`)을 자동으로 열고, SPA 데이터 갱신(`yt-page-data-updated`) 시 패널 상태가 초기화되지 않도록 다시 확인합니다.
-  - `<html>` 전체화면 상태에서는 재생 화면이 좁아지지 않도록 전체화면 해제 시점까지 열기를 보류합니다.
-- **전체화면에서 일시정지 시 댓글창 열기** (`기본값: 꺼짐`)
-  - 전체화면 중 일시정지하면 상황에 맞게 댓글창을 엽니다:
-    - **플레이어 단독 전체화면** (기본 모드): 전체화면을 잠시 해제해 댓글창을 보여주고, 다시 재생하면 자동으로 전체화면에 재진입합니다.
-    - **`<html>` 전체화면** (중간 단계 제거 옵션을 끈 경우): 전체화면을 유지한 채 우측 사이드 댓글창을 열고, 다시 재생하면 닫습니다.
-  - 대기열 전환·재생 종료 시 발생하는 인위적인 pause 신호(`playerState` 5/0)는 무시하고 `30ms` 디바운스를 적용해 오동작을 막습니다.
+- **댓글창 애니메이션 제거** (`기본값: 켜짐`): 댓글창과 사이드 패널을 열고 닫을 때 나오는 슬라이드·크기 전환 효과를 끕니다.
+- **영상 재생 시작 시 댓글창 열기** (`기본값: 켜짐`): 영상을 재생하면 댓글창이 자동으로 열립니다. 이미 전체화면으로 보고 있을 때는 화면을 가리지 않도록 전체화면을 나간 뒤에 열어 줍니다.
+- **전체화면에서 일시정지 시 댓글창 열기** (`기본값: 꺼짐`): 전체화면 중 영상을 멈추면 댓글창을 보여 주고, 다시 재생하면 전체화면으로 돌아갑니다. 일반 플레이어 전체화면에서는 잠시 전체화면을 빠져나와 아래쪽 댓글창을 보여 주며, 중간 크기 단계 제거 옵션을 끈 경우에는 전체화면을 유지한 채 오른쪽 댓글창을 엽니다.
 
-### 설정 UI 및 다국어 지원
+### 설정 창과 언어
 
-- 유저스크립트 확장 프로그램 메뉴(`설정`)에서 설정 모달을 바로 열 수 있으며, YouTube 라이트/다크 테마(`html[dark]`)에 맞춰 자동으로 색상이 적용됩니다.
-- 브라우저 시스템 언어를 감지해 `한국어`, `English`, `日本語`, `中文` 중 하나로 표시하며(미지원 언어는 `English` 기본값), 모달 내 언어 전환 버튼(`시스템`, `English`, `한국어`, `日本語`, `中文`)을 누르면 새로고침 없이 즉시 반영됩니다.
-
----
+- 확장 프로그램 메뉴의 **설정**에서 모든 옵션을 바로 켜고 끌 수 있으며, 바꾼 내용은 즉시 저장됩니다.
+- 유튜브 라이트·다크 테마에 맞춰 색상이 자동으로 바뀝니다. 브라우저 언어에 따라 한국어, 영어, 일본어, 중국어 중 하나가 적용되며(미지원 언어는 영어 기본값), 설정 창 안에서 `시스템`, `English`, `한국어`, `日本語`, `中文`으로 바로 바꿀 수도 있습니다.
 
 ## 설치 방법
 
-1. 브라우저에 유저스크립트 관리 확장 프로그램을 설치합니다.
-   - [Tampermonkey](https://www.tampermonkey.net/) (Chrome, Edge, Firefox, Safari)
-   - [Violentmonkey](https://violentmonkey.github.io/) (Chrome, Edge, Firefox)
-2. 이 저장소의 [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js) 파일을 열고 **Raw** 버튼을 클릭합니다.
-   - 확장 프로그램이 설치 화면을 자동으로 띄우면 **설치**를 누릅니다.
-   - 또는 확장 프로그램 대시보드에서 새 스크립트를 만든 뒤 파일 내용을 그대로 붙여넣어 저장해도 됩니다.
-3. YouTube(`https://www.youtube.com/`) 페이지를 새로고침합니다.
-4. 브라우저 툴바의 확장 프로그램 아이콘 → **`설정`** 메뉴를 눌러 원하는 옵션을 켜거나 끕니다. 변경 사항은 즉시 저장 및 적용됩니다.
+1. 브라우저에 [Tampermonkey](https://www.tampermonkey.net/) 또는 [Violentmonkey](https://violentmonkey.github.io/)를 설치합니다.
+2. 아래 **Install UserScript** 버튼을 눌러 스크립트를 설치합니다:
 
-> [!TIP]
-> 다음 Raw 링크로 바로 원클릭 설치할 수 있습니다: [`https://github.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/raw/main/youtube-instant-fullscreen-and-auto-comments.user.js`](https://github.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/raw/main/youtube-instant-fullscreen-and-auto-comments.user.js)
+   <p>
+     <a href="https://raw.githubusercontent.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/main/youtube-instant-fullscreen-and-auto-comments.user.js">
+       <img src="https://img.shields.io/badge/Install_UserScript-v1.9.0-e5484d?style=for-the-badge&logo=youtube&logoColor=white" alt="Install UserScript v1.9.0" />
+     </a>
+   </p>
 
----
+3. 설치 확인 창이 뜨면 **설치**를 누른 뒤 유튜브 탭을 새로고침합니다.
+4. 브라우저 툴바의 확장 프로그램 아이콘을 눌러 **설정** 메뉴에서 원하는 옵션을 조절하세요.
 
-## 기본 설정표
+<details>
+<summary>수동 설치 및 자동 업데이트 안내</summary>
 
-| 구분 | 설정 항목 | 내부 키 | 기본값 |
-| :--- | :--- | :--- | :---: |
-| **전체화면** | 전체화면 중간 크기 단계 제거 | `directFullscreen` | **켜짐 (`true`)** |
-| **전체화면** | 영상 재생 시 자동 전체화면 | `autoFullscreenOnPlay` | 꺼짐 (`false`) |
-| **댓글창** | 댓글창 애니메이션 제거 | `disableCommentsAnimation` | **켜짐 (`true`)** |
-| **댓글창 → 자동 열기** | 영상 재생 시작 시 댓글창 열기 | `openCommentsOnPlay` | **켜짐 (`true`)** |
-| **댓글창 → 자동 열기** | 전체화면에서 일시정지 시 댓글창 열기 | `openCommentsOnFullscreenPause` | 꺼짐 (`false`) |
-| **언어** | 표시 언어 | `language` | `'auto'` (`시스템`) |
+- 원클릭 설치 화면이 자동으로 열리지 않으면 [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js) 내용을 복사해 스크립트 관리자의 새 스크립트에 붙여넣고 저장하세요.
+- 헤더에 `@updateURL`과 `@downloadURL`이 들어 있어 새 버전이 올라오면 확장 프로그램에서 자동으로 업데이트를 확인합니다.
 
----
+</details>
 
-## 기술 및 호환성 참고
+## 기술 및 호환 참고
 
-- **`@run-at document-start` 실행**: 플레이어가 초기화되기 전에 `ytcfg`, `ytplayer`, `yt.player.Application`, `matchMedia`를 선점해 전환 단계가 발생하기 전에 설정을 주입합니다.
-- **Trusted Types CSP 준수**: YouTube의 엄격한 보안 정책 환경에서도 오류가 나지 않도록 `innerHTML`을 전혀 쓰지 않고 DOM API와 `textContent`만으로 UI와 스타일시트를 구성합니다.
-- **성능 영향 최소화**: 미디어 이벤트(`play`, `playing`, `pause`, `ended`) 앞단에 O(1) 조기 반환 가드를 두고, `Escape` 키 리스너는 설정 창이 열린 동안에만 등록하며, 상시 DOM 감시(MutationObserver) 대신 `yt-page-data-updated` 이벤트를 사용합니다.
-- **설정 데이터 호환성**: `GM_setValue` / `GM_getValue`(미지원 시 `localStorage`)의 `yt_no_zoom_animation_settings_v2` 키에 저장되며, 기존 `v1` 설정이 있으면 자동으로 마이그레이션합니다.
-
----
+- `@run-at document-start` 시점에 실행되어 플레이어 초기화 전에 `ytcfg`와 플레이어 설정의 `external_fullscreen`과 `externalFullscreen` 값을 끕니다. 덕분에 `<html>` 문서 전체를 거치지 않고 `#movie_player`만 바로 전체화면으로 전환됩니다.
+- `window.matchMedia`에서 `(prefers-reduced-motion: reduce)`를 참으로 반환하고, `watch-flexy`·`watch-grid`·`watch-learning-journey` 레이아웃 패널의 CSS 지속 시간을 `0.001ms`로 덮어씁니다. `0s`로 완전히 끄면 유튜브 내부의 `transitionend`·`animationend` 완료 이벤트가 막힐 수 있어 `0.001ms`를 사용합니다.
+- 자동 전체화면은 브라우저의 `navigator.userActivation` 정책을 따르므로 클릭이나 키 입력으로 재생을 시작할 때 동작합니다. 재생 시 댓글창 자동 열기는 브라우저 초기 로딩과 SPA 이동(`yt-page-data-updated`, `yt-navigate-finish`)을 추적해 단계적으로 재시도하며, 전체화면 일시정지 감지는 `30ms` 디바운스로 대기열 전환·종료 시 발생하는 가짜 정지 신호(`playerState` `5`·`0`)를 걸러냅니다.
+- 스타일과 설정 모달을 `innerHTML` 없이 DOM API와 `textContent`만으로 만들어 유튜브의 Trusted Types CSP 환경에서도 차단되지 않습니다.
 
 ## 라이선스
 
-스크립트 헤더(`@license MIT`)에 명시된 **MIT License**에 따라 배포됩니다.
+[MIT License](./LICENSE)를 따릅니다.

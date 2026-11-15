@@ -1,89 +1,68 @@
+<div align="center">
+
 [English](./README.md) · [한국어](./README.ko.md) · [日本語](./README.ja.md) · **简体中文**
 
 # YouTube 瞬时全屏与自动展开评论区
 
 **YouTube Instant Fullscreen & Auto Comments**
 
-用于 YouTube 的轻量级用户脚本：消除将视频切换为全屏时画面放大卡顿的现象，禁用评论区与侧边栏动画，并在视频开始播放或全屏暂停时自动展开评论区。
+用于消除 YouTube 切换全屏时画面放大卡顿的现象、关闭评论区动画，并在视频开始播放或全屏暂停时自动展开评论区的用户脚本。
 
-- **版本：** `1.9.0`
-- **作者：** [`june58-mine`](https://github.com/june58-mine)
-- **开源协议：** `MIT`
-- **适用页面：** `https://www.youtube.com/*`
-- **脚本文件：** [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js)
+<p>
+  <img src="https://img.shields.io/badge/version-1.9.0-19191b?style=flat-square&labelColor=0f0f10" alt="Version 1.9.0" />
+  <img src="https://img.shields.io/badge/license-MIT-19191b?style=flat-square&labelColor=0f0f10" alt="MIT License" />
+  <img src="https://img.shields.io/badge/userscript-Tampermonkey%20%7C%20Violentmonkey-19191b?style=flat-square&labelColor=0f0f10" alt="Tampermonkey and Violentmonkey" />
+</p>
 
----
+</div>
 
 ## 功能特性
 
-### 全屏模式 (Fullscreen)
+### 全屏模式
 
-- **跳过全屏中间尺寸过渡** (`默认开启`)
-  - 禁用 YouTube 的 `external_fullscreen` 与 `externalFullscreen` 配置，消除将视频切换为全屏时画面放大卡顿的现象。
-  - 退出全屏后，会自动恢复进入全屏前已打开的面板（如评论区、实时聊天、字幕文本等）。
-- **播放时自动全屏** (`默认关闭`)
-  - 在播放页（`/watch`、`/live/*`）视频开始播放时自动切换为全屏模式（每个视频触发一次，直至播放结束或重播）。
-  - 遵循浏览器的用户手势策略（`navigator.userActivation`），在用户触发播放时生效。
+- **跳过全屏中间尺寸过渡** (`默认开启`): 消除将视频切换为全屏时画面放大卡顿的现象。
+- **播放时自动全屏** (`默认关闭`): 在播放页（`/watch`、`/live/*`）视频开始播放时自动切换为全屏模式。每个视频触发一次，播放结束或重播后会重置。
 
-### 评论区 (Comments)
+### 评论区
 
-- **禁用评论区动画** (`默认开启`)
-  - 移除打开或关闭评论区及侧边栏时的滑动、缩放及 View Transition 动画（兼容 `watch-flexy`、`watch-grid`、`watch-learning-journey` 布局）。
-  - 挂钩 `window.matchMedia` 的 `prefers-reduced-motion` 查询，并保留 `0.001ms` CSS 动画时长，确保 YouTube 内部的 `transitionend` / `animationend` 回调仍能正常完成。
-- **开始播放时打开评论区** (`默认开启`)
-  - 在播放页视频开始播放时自动展开评论区面板（`engagement-panel-comments-section`），并在 YouTube SPA 数据刷新（`yt-page-data-updated`）后确认保持展开状态。
-  - 若当前处于 `<html>` 全屏下，会延迟到退出全屏后再打开评论区，避免侧边栏挤压全屏画面。
-- **全屏暂停时打开评论区** (`默认关闭`)
-  - 全屏播放期间暂停视频时，根据当前全屏类型自动显示评论区：
-    - **播放器独立全屏**（默认模式）：退出全屏以在下方展示评论区；恢复播放后自动重新进入全屏。
-    - **`<html>` 整页全屏**（关闭跳过中间过渡选项时）：保持全屏并在右侧边栏打开评论区，恢复播放后自动收起。
-  - 已过滤队列切换与播放结束时触发的伪暂停事件（`playerState` 为 5 或 0），并设置 `30ms` 防抖以避免误触发。
+- **禁用评论区动画** (`默认开启`): 关闭打开或收起评论区及侧边栏时的滑动与缩放效果。
+- **开始播放时打开评论区** (`默认开启`): 视频开始播放时自动展开评论区。若此时已处于全屏状态，会等待退出全屏后再打开，以免侧边栏挤压播放画面。
+- **全屏暂停时打开评论区** (`默认关闭`): 全屏播放时暂停视频会自动显示评论区，恢复播放后重新回到全屏。在默认播放器全屏下会暂时退出全屏并在下方展示评论；若关闭了"跳过全屏中间尺寸过渡"，则会保持全屏并在右侧边栏打开评论区。
 
-### 设置界面与多语言支持
+### 设置界面与语言
 
-- 可通过脚本管理器的扩展菜单（`设置`）随时打开内置设置弹窗，自动适配 YouTube 浅色/深色主题（`html[dark]`）。
-- 自动检测浏览器语言（支持 `English`、`한국어`、`日本語`、`中文`，未支持语言默认回退为 `English`），并可在设置弹窗内实时切换语言（`系统` / `English` / `한국어` / `日本語` / `中文`），无需刷新页面。
+- 随时可在扩展菜单的 **设置** 中开关各项功能，所有更改会立即保存并生效。
+- 设置弹窗会自动适配 YouTube 的浅色与深色主题，并根据浏览器语言自动切换中文、英语、韩语或日语（其他语言默认使用英语），也可在弹窗内实时切换 `系统`、`English`、`한국어`、`日本語`、`中文`。
 
----
+## 安装方法
 
-## 安装指南
+1. 在浏览器中安装 [Tampermonkey](https://www.tampermonkey.net/) 或 [Violentmonkey](https://violentmonkey.github.io/)。
+2. 点击下方的 **Install UserScript** 按钮安装脚本：
 
-1. 在浏览器中安装用户脚本管理器扩展：
-   - [Tampermonkey](https://www.tampermonkey.net/)（Chrome、Edge、Firefox、Safari）
-   - [Violentmonkey](https://violentmonkey.github.io/)（Chrome、Edge、Firefox）
-2. 打开本仓库中的 [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js) 文件，点击页面右上方的 **Raw** 按钮。
-   - 脚本管理器通常会自动弹出安装确认页面。
-   - 也可以在脚本管理器中新建脚本，直接复制并保存该文件全部内容。
-3. 打开或刷新 YouTube（`https://www.youtube.com/`）。
-4. 点击扩展菜单中的 **`设置`** 即可按需调整各项开关，所有更改都会立即保存并生效。
+   <p>
+     <a href="https://raw.githubusercontent.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/main/youtube-instant-fullscreen-and-auto-comments.user.js">
+       <img src="https://img.shields.io/badge/Install_UserScript-v1.9.0-e5484d?style=for-the-badge&logo=youtube&logoColor=white" alt="Install UserScript v1.9.0" />
+     </a>
+   </p>
 
-> [!TIP]
-> 可直接点击以下 Raw 链接一键安装：[`https://github.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/raw/main/youtube-instant-fullscreen-and-auto-comments.user.js`](https://github.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/raw/main/youtube-instant-fullscreen-and-auto-comments.user.js)
+3. 在弹出的安装确认页面点击 **安装**，随后刷新 YouTube 页面即可使用。
+4. 点击扩展菜单中的 **设置** 即可按需调整各个选项。
 
----
+<details>
+<summary>手动安装与自动更新说明</summary>
 
-## 默认设置一览
+- 如果一键安装窗口未自动弹出，可复制 [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js) 的全部内容，在脚本管理器中新建脚本并粘贴保存。
+- 脚本头部已配置 `@updateURL` 与 `@downloadURL`，后续发布新版本时扩展会自动检查更新。
 
-| 分组 | 设置项 | 配置键 | 默认值 |
-| :--- | :--- | :--- | :---: |
-| **全屏模式** | 跳过全屏中间尺寸过渡 | `directFullscreen` | **开启 (`true`)** |
-| **全屏模式** | 播放时自动全屏 | `autoFullscreenOnPlay` | 关闭 (`false`) |
-| **评论区** | 禁用评论区动画 | `disableCommentsAnimation` | **开启 (`true`)** |
-| **评论区 → 自动展开** | 开始播放时打开评论区 | `openCommentsOnPlay` | **开启 (`true`)** |
-| **评论区 → 自动展开** | 全屏暂停时打开评论区 | `openCommentsOnFullscreenPause` | 关闭 (`false`) |
-| **语言** | 显示语言 | `language` | `'auto'` (`系统`) |
+</details>
 
----
+## 技术与兼容性说明
 
-## 技术说明与兼容性
-
-- **在 `document-start` 阶段运行**：在播放器实例创建前提前挂钩 `ytcfg`、`ytplayer`、`yt.player.Application` 和 `matchMedia`，避免页面初始化后再补改配置导致切换闪烁。
-- **兼容 Trusted Types CSP**：全程仅使用原生 DOM API 与 `textContent` 构建样式和设置界面，不使用 `innerHTML`。
-- **极低运行时开销**：在媒体事件（`play`、`playing`、`pause`、`ended`）入口进行 O(1) 快速判断；`Escape` 键盘监听仅在设置弹窗打开时绑定；结合 `yt-page-data-updated` 事件替代持续 DOM 轮询。
-- **配置存储与迁移**：通过 `GM_setValue` / `GM_getValue`（或回退至 `localStorage`）保存在 `yt_no_zoom_animation_settings_v2` 键中，并兼容自动迁移旧版 `v1` 配置。
-
----
+- 在 `@run-at document-start` 阶段运行，在播放器初始化前禁用 `ytcfg` 与播放器配置中的 `external_fullscreen` 和 `externalFullscreen`，让 `#movie_player` 直接进入全屏而无需经过 `<html>` 尺寸过渡。
+- 通过 `window.matchMedia` 使 `prefers-reduced-motion: reduce` 返回真值，并将 `watch-flexy`、`watch-grid` 和 `watch-learning-journey` 面板的 CSS 过渡与动画时长覆盖为 `0.001ms`；不使用 `0s`，以免 YouTube 内部的 `transitionend` 和 `animationend` 回调卡住无法触发。
+- 自动全屏遵循浏览器的 `navigator.userActivation` 限制，仅在用户点击或按键交互后触发播放时生效。自动打开评论区通过监听 `yt-page-data-updated` 与 `yt-navigate-finish` 并配合阶梯重试来适配冷启动和 SPA 切页；全屏暂停检测采用 `30ms` 防抖，并会过滤切歌队列与播放结束时产生的伪暂停状态（`playerState` `5` 和 `0`）。
+- 样式与设置界面采用原生 DOM API 和 `textContent` 构建，不使用 `innerHTML`，可正常通过 YouTube 的 Trusted Types CSP 校验。
 
 ## 开源协议
 
-基于脚本头部声明的 **MIT License**（`@license MIT`）发布。
+基于 [MIT License](./LICENSE) 发布。

@@ -1,87 +1,65 @@
+<div align="center">
+
 **English** · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [简体中文](./README.zh-CN.md)
 
 # YouTube Instant Fullscreen & Auto Comments
 
-A lightweight userscript for YouTube that removes choppy zoom steps when switching to fullscreen, disables comments drawer animations, and automatically opens comments when playback starts or when pausing in fullscreen.
+A userscript that fixes choppy fullscreen zoom transitions on YouTube, disables comments animations, and opens comments automatically when playback starts or when you pause in fullscreen.
 
-- **Version:** `1.9.0`
-- **Author:** [`june58-mine`](https://github.com/june58-mine)
-- **License:** `MIT`
-- **Target:** `https://www.youtube.com/*`
-- **Script:** [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js)
+<p>
+  <img src="https://img.shields.io/badge/version-1.9.0-19191b?style=flat-square&labelColor=0f0f10" alt="Version 1.9.0" />
+  <img src="https://img.shields.io/badge/license-MIT-19191b?style=flat-square&labelColor=0f0f10" alt="MIT License" />
+  <img src="https://img.shields.io/badge/userscript-Tampermonkey%20%7C%20Violentmonkey-19191b?style=flat-square&labelColor=0f0f10" alt="Tampermonkey and Violentmonkey" />
+</p>
 
----
+</div>
 
 ## Features
 
 ### Fullscreen
 
-- **Skip intermediate fullscreen sizing** (`Enabled by default`)
-  - Removes choppy zoom stutter when switching a video to fullscreen by disabling YouTube's `external_fullscreen` / `externalFullscreen` hooks so fullscreen targets the player directly.
-  - Automatically restores panels (comments, live chat, transcript, etc.) that were expanded before entering fullscreen once you exit fullscreen.
-- **Auto-fullscreen on playback** (`Disabled by default`)
-  - Switches to fullscreen automatically when playback begins on `/watch` or `/live/*` pages (triggers once per video until playback ends or replays).
-  - Respects browser autoplay rules (`navigator.userActivation`), running on user-initiated playback.
+- **Skip intermediate fullscreen sizing** (`Default: ON`): Removes the choppy zoom stutter when switching a video to fullscreen.
+- **Auto-fullscreen on playback** (`Default: OFF`): Switches to fullscreen automatically when playback starts on watch and live pages. It runs once per video until playback ends or replays.
 
 ### Comments
 
-- **Disable comments animations** (`Enabled by default`)
-  - Removes slide, resize, and view-transition animations across comments and side engagement panels (`watch-flexy`, `watch-grid`, and `watch-learning-journey` layouts).
-  - Spoofs `prefers-reduced-motion` queries inside `window.matchMedia` while using `0.001ms` CSS timings so YouTube's internal `transitionend` / `animationend` callbacks still complete reliably.
-- **Open comments when playback starts** (`Enabled by default`)
-  - Automatically expands the comments panel (`engagement-panel-comments-section`) when playback begins on watch pages and confirms state across YouTube SPA updates (`yt-page-data-updated`).
-  - When inside `<html>` fullscreen, opening is deferred until fullscreen exit so the side drawer does not shrink the fullscreen video.
-- **Open comments on fullscreen pause** (`Disabled by default`)
-  - Automatically surfaces comments when you pause in fullscreen:
-    - **Player-only fullscreen** (default): exits fullscreen to display comments below the player, and re-enters fullscreen automatically when playback resumes.
-    - **`<html>` fullscreen** (when direct fullscreen is turned off): opens the right-hand comments drawer inside fullscreen and closes it again on resume.
-  - Debounced (`30ms`) and filtered so synthetic pause events during video queueing or playback ending do not trigger unintended toggles.
+- **Disable comments animations** (`Default: ON`): Turns off slide and resize transitions when opening or closing comments and side panels.
+- **Open comments when playback starts** (`Default: ON`): Opens the comments panel automatically when playback begins. If you are already in fullscreen, comments wait until you exit fullscreen so the side panel does not shrink the video.
+- **Open comments on fullscreen pause** (`Default: OFF`): Shows comments when you pause in fullscreen and returns to fullscreen when playback resumes. In normal player fullscreen it leaves fullscreen briefly to show comments below; if intermediate sizing removal is off, it opens the side panel inside fullscreen.
 
-### Settings UI & Localization
+### Settings & Language
 
-- Built-in modal accessible from your userscript manager's menu (`Settings`), with YouTube light/dark theme support (`html[dark]`).
-- Auto-detects browser language (`en`, `ko`, `ja`, `zh`), defaults to **English** for unsupported locales, and provides an instant 5-option switcher (`System`, `English`, `한국어`, `日本語`, `中文`) that updates the modal live without reloading.
-
----
+- Open **Settings** from your userscript manager menu at any time. Changes save and apply right away.
+- The modal matches YouTube's light and dark themes and picks English, Korean, Japanese, or Chinese based on your browser language (defaulting to English for other languages). You can also switch live between `System`, `English`, `한국어`, `日本語`, and `中文`.
 
 ## Installation
 
-1. Install a userscript manager extension in your browser:
-   - [Tampermonkey](https://www.tampermonkey.net/) (Chrome, Edge, Firefox, Safari)
-   - [Violentmonkey](https://violentmonkey.github.io/) (Chrome, Edge, Firefox)
-2. Open [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js) in this repository and click **Raw**.
-   - Your userscript manager should prompt you to install it automatically.
-   - Alternatively, create a new script in your userscript manager and paste the contents of `youtube-instant-fullscreen-and-auto-comments.user.js`.
-3. Open or reload YouTube (`https://www.youtube.com/`).
-4. Click your extension icon and choose **`Settings`** to adjust preferences at any time. All changes are saved and applied immediately.
+1. Install [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) in your browser.
+2. Click **Install UserScript** below and confirm the prompt:
 
-> [!TIP]
-> You can install directly using the one-click Raw link: [`https://github.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/raw/main/youtube-instant-fullscreen-and-auto-comments.user.js`](https://github.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/raw/main/youtube-instant-fullscreen-and-auto-comments.user.js)
+   <p>
+     <a href="https://raw.githubusercontent.com/june58-mine/youtube-instant-fullscreen-and-auto-comments/main/youtube-instant-fullscreen-and-auto-comments.user.js">
+       <img src="https://img.shields.io/badge/Install_UserScript-v1.9.0-e5484d?style=for-the-badge&logo=youtube&logoColor=white" alt="Install UserScript v1.9.0" />
+     </a>
+   </p>
 
----
+3. Reload YouTube, then open **Settings** from your extension menu whenever you want to adjust options.
 
-## Default Settings
+<details>
+<summary>Manual installation and updates</summary>
 
-| Section | Option | Key | Default |
-| :--- | :--- | :--- | :---: |
-| **Fullscreen** | Skip intermediate fullscreen sizing | `directFullscreen` | **ON** |
-| **Fullscreen** | Auto-fullscreen on playback | `autoFullscreenOnPlay` | OFF |
-| **Comments** | Disable comments animations | `disableCommentsAnimation` | **ON** |
-| **Comments → Auto-open** | Open comments when playback starts | `openCommentsOnPlay` | **ON** |
-| **Comments → Auto-open** | Open comments on fullscreen pause | `openCommentsOnFullscreenPause` | OFF |
-| **Language** | Display language | `language` | `'auto'` (`System`) |
+- If the one-click install prompt does not open, copy [`youtube-instant-fullscreen-and-auto-comments.user.js`](./youtube-instant-fullscreen-and-auto-comments.user.js) and paste it into a new script in your userscript manager.
+- Updates are handled automatically through `@updateURL` and `@downloadURL`.
 
----
+</details>
 
-## Technical Notes
+## Technical & Compatibility Notes
 
-- **Runs at `document-start`**: Traps `ytcfg`, `ytplayer`, `yt.player.Application`, and `matchMedia` early so YouTube reads the configured settings before initializing player UI.
-- **Trusted Types CSP safe**: Builds all injected stylesheets and modal elements exclusively through DOM APIs and `textContent` with zero `innerHTML` usage.
-- **Low runtime overhead**: Uses O(1) fast-path checks on media events (`play`, `playing`, `pause`, `ended`), attaches the modal `Escape` key listener only while the settings modal is open, and listens for `yt-page-data-updated` instead of continuous DOM polling.
-- **Settings persistence**: Saved via `GM_setValue` / `GM_getValue` (falling back to `localStorage`) under `yt_no_zoom_animation_settings_v2`, with automatic migration from legacy `v1` keys.
-
----
+- Runs at `@run-at document-start` to disable `external_fullscreen` and `externalFullscreen` in `ytcfg` and player startup configs before initialization, so `#movie_player` enters fullscreen directly without resizing `<html>`.
+- Reports `prefers-reduced-motion: reduce` as true via `window.matchMedia` and overrides CSS transition and animation durations to `0.001ms` across `watch-flexy`, `watch-grid`, and `watch-learning-journey` panels so YouTube's `transitionend` and `animationend` listeners do not stall as they would at `0s`.
+- `autoFullscreenOnPlay` follows browser `navigator.userActivation` rules, so auto-fullscreen triggers only after a click or key interaction. Comment auto-opening tracks cold browser loads and YouTube SPA transitions through `yt-page-data-updated` and `yt-navigate-finish` retries, while fullscreen pause detection uses a `30ms` debounce and ignores synthetic queue or end pauses (`playerState` `5` and `0`).
+- Builds styles and UI nodes with DOM APIs and `textContent` without `innerHTML`, so YouTube's Trusted Types CSP does not block it.
 
 ## License
 
-Released under the **MIT License** (as declared via `@license MIT` in the userscript header).
+Released under the [MIT License](./LICENSE).
