@@ -16,6 +16,12 @@
 
 </div>
 
+## 미리보기
+
+<div align="center">
+  <img src="./assets/settings-modal-ko.png" alt="YouTube 즉시 전체화면 & 자동 댓글창 설정 화면 (다크 테마)" width="440" />
+</div>
+
 ## 주요 기능
 
 ### 전체화면

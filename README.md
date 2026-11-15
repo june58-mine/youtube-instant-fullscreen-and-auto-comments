@@ -14,6 +14,12 @@ A userscript that fixes choppy fullscreen zoom transitions on YouTube, disables 
 
 </div>
 
+## Preview
+
+<div align="center">
+  <img src="./assets/settings-modal-en.png" alt="YouTube Instant Fullscreen & Auto Comments settings modal (dark theme)" width="440" />
+</div>
+
 ## Features
 
 ### Fullscreen

@@ -16,6 +16,12 @@
 
 </div>
 
+## 预览
+
+<div align="center">
+  <img src="./assets/settings-modal-zh.png" alt="YouTube 瞬时全屏与自动展开评论区 设置弹窗（深色主题）" width="440" />
+</div>
+
 ## 功能特性
 
 ### 全屏模式

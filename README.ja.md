@@ -16,6 +16,12 @@ YouTube の全画面切り替え時に起きる不自然なズームのカクつ
 
 </div>
 
+## プレビュー
+
+<div align="center">
+  <img src="./assets/settings-modal-ja.png" alt="YouTube 即時全画面 & コメント自動表示 設定画面（ダークテーマ）" width="440" />
+</div>
+
 ## 主な機能
 
 ### 全画面表示
