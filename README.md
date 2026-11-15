@@ -1,6 +1,6 @@
 <div align="center">
 
-**English** · [한국어](./README.ko.md) · [日本語](./README.ja.md) · [简体中文](./README.zh-CN.md)
+**🇺🇸 English** · [🇰🇷 한국어](./README.ko.md) · [🇯🇵 日本語](./README.ja.md) · [🇨🇳 简体中文](./README.zh-CN.md)
 
 # YouTube Instant Fullscreen & Auto Comments
 
